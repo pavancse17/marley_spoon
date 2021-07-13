@@ -6,10 +6,5 @@ defmodule Marely.Contentful do
 
   defp parse_body(%HTTPoison.Response{} = resonse) do
     Jason.decode!(resonse.body)
-    |>map_data()
-  end
-
-  defp map_data(%{"items" => items, "includes" => includes}) do
-    IO.inspect(items)
   end
 end
