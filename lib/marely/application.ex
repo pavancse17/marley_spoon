@@ -8,7 +8,7 @@ defmodule Marely.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Marely.Repo,
+      # Marely.Repo, 
       # Start the Telemetry supervisor
       MarelyWeb.Telemetry,
       # Start the PubSub system
