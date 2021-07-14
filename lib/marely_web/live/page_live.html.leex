@@ -2,10 +2,48 @@
     Marely Spoons
 </div>
 <div class="flex justify-center space-y-2 space-x-4 flex-wrap">
-  <%= for recipe <- @recipes do %>
-  <div class="p-2 bg-gray-100 rounded-md flex flex-col items-center w-72 cursor-pointer transition-all duration-200 hover:scale-105">
-    <img class="object-cover" src=<%= image(recipe).url %> alt=<%= image(recipe).title %>>
-    <div class="text-center mt-2"><%= Map.get(recipe, "title") %></div>
-  </div>
+  <%= for {recipe, index} <- Enum.with_index(@recipes) do %>
+    <%= live_patch to: Routes.page_path(@socket, :detail, index) do %>
+      <div class="p-2 bg-gray-100 rounded-md flex flex-col items-center w-72 cursor-pointer transition-all duration-200 hover:scale-105">
+        <img class="object-cover" src=<%= image(recipe).url %> alt=<%= image(recipe).title %>>
+        <div class="text-center mt-2"><%= Map.get(recipe, "title") %></div>
+      </div>
+    <% end %>
   <% end %>
 </div>
+
+<%= if @live_action == :detail do %>
+  <div class="fixed top-0 bottom-0 left-0 right-0 flex bg-gray-400 justify-center items-center bg-opacity-75 text-sm">
+    <div class="bg-white border-gray-300 rounded-sm border border-solid relative w-4/5">
+      <div class="py-4 px-4">
+        <div class="flex">
+          <div>
+            <img class="object-cover" src=<%= image(@recipe).url %> alt=<%= image(@recipe).title %>>
+            <div class="text-center mt-2 font-bold"><%= Map.get(@recipe, "title") %></div>
+          </div>
+          <div class="mx-2 flex flex-col space-y-2">
+            <div>
+              <h2 class="font-bold">Description:</h2>
+              <p><%= Map.get(@recipe, "description") %></p>
+            </div>
+            <div>
+              <h2 class="font-bold">Chef:</h2>
+              <p><%= @recipe|>Map.get("chef", %{})|>Map.get("name") %></p>
+            </div>
+            <div>
+              <h2 class="font-bold">Tags:</h2>
+              <div class="flex">
+                <%= for tag <- Map.get(@recipe, "tags", []) do %>
+                  <div class="bg-blue-700 mr-2 p-1 text-white rounded font-bold"><%= Map.get(tag, "name") %></div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-center pt-4 space-x-3 items-center">
+          <%= live_patch "CLOSE", to: Routes.page_path(@socket, :index), class: "font-bold text-tgray-800" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
