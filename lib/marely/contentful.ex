@@ -11,6 +11,7 @@ defmodule Marely.Contentful do
   def get_recipies() do
     HTTPoison.get!("#{get_base_url()}&content_type=recipe")
     |>parse_response()
+    |>Map.get(:data)
   end
 
   defp parse_response(%HTTPoison.Response{} = resonse) do
@@ -26,7 +27,7 @@ defmodule Marely.Contentful do
 
   defp parse_data([ %{"fields" => fields} | remaining], acc) do
     element = Enum.into(fields, %{}, fn {key, value} ->
-      {String.to_atom(key), parase_field(value, acc)}
+      {key, parase_field(value, acc)}
     end)
     parse_data(remaining, Map.update!(acc, :data, fn existing -> [element | existing] end))
   end

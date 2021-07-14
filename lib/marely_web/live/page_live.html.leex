@@ -1,1 +1,11 @@
-<div class="bg-black w-9 h-5">Hello</div>
+<div class="bg-blue-500 text-white text-xl p-4">
+    Marely Spoons
+</div>
+<div class="flex justify-center space-y-2 space-x-4 flex-wrap">
+  <%= for recipe <- @recipes do %>
+  <div class="p-2 bg-gray-100 rounded-md flex flex-col items-center w-72 cursor-pointer transition-all duration-200 hover:scale-105">
+    <img class="object-cover" src=<%= image(recipe).url %> alt=<%= image(recipe).title %>>
+    <div class="text-center mt-2"><%= Map.get(recipe, "title") %></div>
+  </div>
+  <% end %>
+</div>
